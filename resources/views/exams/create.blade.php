@@ -62,12 +62,15 @@
                     <x-input-label for="questions" :value="__('Questões')" />
 
                     <select data-te-select-init id="questions" name="questions[]" class = "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" multiple>
-                    @foreach ($questions as $question)
-                        <option value="{{ $question->id }}">{{ $question->title }}</option>
+                    @foreach ($questions as $key => $question)
+                    <option value="{{ $question->id }}" 
+                        {{ in_array($question->id, old('questions') ?? []) ? 'selected' : '' }} >
+                        {{ $question->title }}
+                    </option>
                     @endforeach
                     </select>
 
-                    <x-input-error :messages="$errors->get('questions[]')" class="mt-2" />
+                    <x-input-error :messages="$errors->get('questions')" class="mt-2" />
                 </div>
 
                 

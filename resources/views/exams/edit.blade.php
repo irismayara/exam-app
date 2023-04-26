@@ -64,7 +64,9 @@
 
                     <select data-te-select-init id="questions" name="questions[]" class = "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" multiple>
                     @foreach($questions as $question)
-                        <option value="{{ $question->id }}" {{ $exam->questions->contains($question->id) ? 'selected' : '' }}>{{ $question->title }}</option>
+                        <option value="{{ $question->id }}" {{ $exam->questions->contains($question->id) ? 'selected' : '' }}>
+                            {{ $question->title }}
+                        </option>
                     @endforeach
                     </select>
 

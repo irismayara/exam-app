@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ExamRequest extends FormRequest
 {
@@ -23,9 +24,9 @@ class ExamRequest extends FormRequest
     {
         return [
             'title' => 'required|string|min:3|max:255',
-            'datetime_start' => 'required',
-            'datetime_end' => 'required',
-            'time' => 'required',
+            'datetime_start' => ['required', 'date', 'after:now'],
+            'datetime_end' => ['required', 'date', 'after:datetime_start'],
+            'time' => 'required|numeric|min:5',
             'questions' => 'required|array|min:2'
         ];
     }

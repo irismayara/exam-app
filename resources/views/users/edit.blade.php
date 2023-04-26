@@ -55,10 +55,10 @@
                     <select data-te-select-init id="type" name="type" class = "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full">
                         <option selected disabled>Selecione o tipo de usuário</option>
                         <option value="Aluno" 
-                            {{ old('type', $user->type) === 'Aluno' ? 'selected' : '' }}>Aluno
+                            {{ old('type', $user->type) == 'Aluno' ? 'selected' : '' }}>Aluno
                         </option>
                         <option value="Professor" 
-                            {{ old('type', $user->type) === 'Professor' ? 'selected' : '' }}>Professor
+                            {{ old('type', $user->type) == 'Professor' ? 'selected' : '' }}>Professor
                         </option>
                     </select>
                     

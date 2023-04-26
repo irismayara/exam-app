@@ -107,6 +107,7 @@
                     <x-input-error :messages="$errors->get('type')" class="mt-2" />
                 </div>
 
+                @if($question->options->count() > 0)
                 <fieldset id="options">
                     <div>
                         <!-- Altenativa 1 -->
@@ -114,9 +115,9 @@
                             <x-input-label for="option1" :value="__('Alternativa 1')" />
 
                             <x-text-input id="option1" class="block mt-1 w-full" type="text" name="option[]" 
-                            :value="old('option[]', $question->options[0]->option)" required autofocus />
+                            :value="old('option.0', $question->options[0]->option)" required autofocus />
 
-                            <x-input-error :messages="$errors->get('option[]')" class="mt-2" />
+                            <x-input-error :messages="$errors->get('option.0')" class="mt-2" />
                         </div>
                          <!-- Is Correct -->
                         <div class="block mt-2">
@@ -134,9 +135,9 @@
                             <x-input-label for="option2" :value="__('Alternativa 2')" />
 
                             <x-text-input id="option2" class="block mt-1 w-full" type="text" name="option[]" 
-                            :value="old('option[]', $question->options[1]->option)" required autofocus />
+                            :value="old('option.1', $question->options[1]->option)" required autofocus />
 
-                            <x-input-error :messages="$errors->get('option[]')" class="mt-2" />
+                            <x-input-error :messages="$errors->get('option.1')" class="mt-2" />
                         </div>
                         <!-- Is Correct -->
                         <div class="block mt-2">
@@ -154,9 +155,9 @@
                             <x-input-label for="option3" :value="__('Alternativa 3')" />
 
                             <x-text-input id="option3" class="block mt-1 w-full" type="text" name="option[]" 
-                            :value="old('option[]', $question->options[2]->option)" required autofocus />
+                            :value="old('option.2', $question->options[2]->option)" required autofocus />
 
-                            <x-input-error :messages="$errors->get('option[]')" class="mt-2" />
+                            <x-input-error :messages="$errors->get('option.2')" class="mt-2" />
                         </div>
                         <!-- Is Correct -->
                         <div class="block mt-2">
@@ -174,9 +175,9 @@
                             <x-input-label for="option4" :value="__('Alternativa 4')" />
 
                             <x-text-input id="option4" class="block mt-1 w-full" type="text" name="option[]" 
-                            :value="old('option[]', $question->options[3]->option)" required autofocus />
+                            :value="old('option.3', $question->options[3]->option)" required autofocus />
 
-                            <x-input-error :messages="$errors->get('option[]')" class="mt-2" />
+                            <x-input-error :messages="$errors->get('option.3')" class="mt-2" />
                         </div>
                         <!-- Is Correct -->
                         <div class="block mt-2">
@@ -189,6 +190,7 @@
                         </div> 
                     </div>
                 </fieldset>
+                @endif
 
                 <x-secondary-button class="mt-6">
                     {{ __('Cancelar') }}

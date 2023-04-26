@@ -54,11 +54,16 @@
 
                     <select data-te-select-init id="difficulty" name="difficulty" class = "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full">
                         <option selected disabled>Selecione o nível de dificuldade</option>
-                        <option value="1" {{ old('difficulty') }}>Nível 1</option>
-                        <option value="2" {{ old('difficulty') }}>Nível 2</option>
-                        <option value="3" {{ old('difficulty') }}>Nível 3</option>
-                        <option value="4" {{ old('difficulty') }}>Nível 4</option>
-                        <option value="5" {{ old('difficulty') }}>Nível 5</option>
+                        <option value="1" 
+                        {{ old('difficulty') == 1 ? 'selected' : '' }}>Nível 1</option>
+                        <option value="2" 
+                        {{ old('difficulty') == 2 ? 'selected' : '' }}>Nível 2</option>
+                        <option value="3" 
+                        {{ old('difficulty') == 3 ? 'selected' : '' }}>Nível 3</option>
+                        <option value="4" 
+                        {{ old('difficulty') == 4 ? 'selected' : '' }}>Nível 4</option>
+                        <option value="5" 
+                        {{ old('difficulty') == 5 ? 'selected' : '' }}>Nível 5</option>
                     </select>
                     
                     <x-input-error :messages="$errors->get('difficulty')" class="mt-2" />
@@ -88,10 +93,14 @@
 
                     <select data-te-select-init id="type" name="type" class = "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full">
                         <option selected disabled>Selecione o tipo de questão</option>
-                        <option value="1" {{ old('type') }}>Aberta</option>
-                        <option value="2" {{ old('type') }}>Múltipla escolha com uma resposta correta</option>
-                        <option value="3" {{ old('type') }}>Múltipla escolha com mais de uma resposta correta</option>
-                        <option value="4" {{ old('type') }}>Verdadeiro ou falso</option>
+                        <option value="1" 
+                        {{ old('type') == 1 ? 'selected' : '' }}>Aberta</option>
+                        <option value="2" 
+                        {{ old('type') == 2 ? 'selected' : '' }}>Múltipla escolha com uma resposta correta</option>
+                        <option value="3" 
+                        {{ old('type') == 3 ? 'selected' : '' }}>Múltipla escolha com mais de uma resposta correta</option>
+                        <option value="4" 
+                        {{ old('type') == 4 ? 'selected' : '' }}>Verdadeiro ou falso</option>
                     </select>
                     
                     <x-input-error :messages="$errors->get('type')" class="mt-2" />
@@ -103,9 +112,9 @@
                         <div>
                             <x-input-label for="option1" :value="__('Alternativa 1')" />
 
-                            <x-text-input id="option1" class="block mt-1 w-full" type="text" name="option[]" :value="old('option[]')" required autofocus />
+                            <x-text-input id="option1" class="block mt-1 w-full" type="text" name="option[]" :value="old('option.0')" autofocus />
 
-                            <x-input-error :messages="$errors->get('option[]')" class="mt-2" />
+                            <x-input-error :messages="$errors->get('option.0')" class="mt-2" />
                         </div>
                          <!-- Is Correct -->
                         <div class="block mt-2">
@@ -120,9 +129,9 @@
                         <div class="mt-4">
                             <x-input-label for="option2" :value="__('Alternativa 2')" />
 
-                            <x-text-input id="option2" class="block mt-1 w-full" type="text" name="option[]" :value="old('option[]')" required autofocus />
+                            <x-text-input id="option2" class="block mt-1 w-full" type="text" name="option[]" :value="old('option.1')" autofocus />
 
-                            <x-input-error :messages="$errors->get('option[]')" class="mt-2" />
+                            <x-input-error :messages="$errors->get('option.1')" class="mt-2" />
                         </div>
                         <!-- Is Correct -->
                         <div class="block mt-2">
@@ -137,9 +146,9 @@
                         <div class="mt-4">
                             <x-input-label for="option3" :value="__('Alternativa 3')" />
 
-                            <x-text-input id="option3" class="block mt-1 w-full" type="text" name="option[]" :value="old('option[]')" required autofocus />
+                            <x-text-input id="option3" class="block mt-1 w-full" type="text" name="option[]" :value="old('option.2')" autofocus />
 
-                            <x-input-error :messages="$errors->get('option[]')" class="mt-2" />
+                            <x-input-error :messages="$errors->get('option.2')" class="mt-2" />
                         </div>
                         <!-- Is Correct -->
                         <div class="block mt-2">
@@ -154,9 +163,9 @@
                         <div class="mt-4">
                             <x-input-label for="option4" :value="__('Alternativa 4')" />
 
-                            <x-text-input id="option4" class="block mt-1 w-full" type="text" name="option[]" :value="old('option[]')" required autofocus />
+                            <x-text-input id="option4" class="block mt-1 w-full" type="text" name="option[]" :value="old('option.3')" autofocus />
 
-                            <x-input-error :messages="$errors->get('option[]')" class="mt-2" />
+                            <x-input-error :messages="$errors->get('option.3')" class="mt-2" />
                         </div>
                         <!-- Is Correct -->
                         <div class="block mt-2">
