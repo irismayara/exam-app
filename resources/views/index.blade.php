@@ -3,6 +3,12 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Início') }}
         </h2>
+        <form class="ml-auto flex w-1/4">
+            <x-input-search id="search"
+                            name="search"
+                            aria-label="Search"
+                            aria-describedby="button-addon2"/>
+        </form>
     </x-slot>
 
     <div class="py-12">
