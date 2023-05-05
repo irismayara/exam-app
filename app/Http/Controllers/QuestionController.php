@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Auth;
 
 class QuestionController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->authorizeResource(Question::class, 'question');
+    }
+    
     /**
      * Display a listing of the resource.
      */

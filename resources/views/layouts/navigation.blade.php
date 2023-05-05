@@ -18,9 +18,11 @@
                     <x-nav-link :href="route('user.index')" :active="request()->routeIs('user.index')">
                         {{ __('Usuários') }}
                     </x-nav-link>
+                    @can('viewAny', App\Models\Question::class)
                     <x-nav-link :href="route('question.index')" :active="request()->routeIs('question.index')">
                         {{ __('Questões') }}
                     </x-nav-link>
+                    @endcan
                     <x-nav-link :href="route('exam.index')" :active="request()->routeIs('exam.index')">
                         {{ __('Provas') }}
                     </x-nav-link>
