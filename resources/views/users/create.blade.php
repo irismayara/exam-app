@@ -54,10 +54,10 @@
 
                     <select data-te-select-init id="type" name="type" class = "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full">
                         <option selected disabled>Selecione o tipo de usuário</option>
-                        <option value="Aluno" 
-                        {{ old('type') == 'Aluno' ? 'selected' : '' }}>Aluno</option>
-                        <option value="Professor" 
-                        {{ old('type') == 'Professor' ? 'selected' : '' }}>Professor</option>
+                        <option value="discente" 
+                        {{ old('type') == 'discente' ? 'selected' : '' }}>Discente</option>
+                        <option value="docente" 
+                        {{ old('type') == 'docente' ? 'selected' : '' }}>Docente</option>
                     </select>
                     
                     <x-input-error :messages="$errors->get('type')" class="mt-2" />

@@ -13,7 +13,7 @@ class ExamPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return $user->type === 'docente' || $user->type === 'discente';
     }
 
     /**
@@ -21,7 +21,7 @@ class ExamPolicy
      */
     public function view(User $user, Exam $exam): bool
     {
-        //
+        return $user->type === 'docente' || $user->type === 'discente';
     }
 
     /**
@@ -29,7 +29,7 @@ class ExamPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return $user->type === 'docente';
     }
 
     /**
@@ -37,7 +37,7 @@ class ExamPolicy
      */
     public function update(User $user, Exam $exam): bool
     {
-        //
+        return $user->type === 'docente' && $user->id === $exam->created_by;
     }
 
     /**
@@ -45,7 +45,7 @@ class ExamPolicy
      */
     public function delete(User $user, Exam $exam): bool
     {
-        //
+        return $user->type === 'docente' && $user->id === $exam->created_by;
     }
 
     /**
@@ -53,7 +53,7 @@ class ExamPolicy
      */
     public function restore(User $user, Exam $exam): bool
     {
-        //
+        return $user->type === 'docente' && $user->id === $exam->created_by;
     }
 
     /**
@@ -61,6 +61,6 @@ class ExamPolicy
      */
     public function forceDelete(User $user, Exam $exam): bool
     {
-        //
+        return $user->type === 'docente' && $user->id === $exam->created_by;
     }
 }

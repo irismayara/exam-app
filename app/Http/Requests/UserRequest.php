@@ -26,7 +26,7 @@ class UserRequest extends FormRequest
             'name' => 'required|max:255',
             'email' => 'required|max:255|email|unique:users,email,'.$this->route('id'),
             'ie' => 'required|max:255',
-            'type' => ['required', Rule::in(['Aluno', 'Professor', 'Admin']),]
+            'type' => ['required', Rule::in(['discente', 'docente', 'admin']),]
         ];
     }
 }

@@ -17,6 +17,8 @@ return new class extends Migration
             $table->dateTime('datetime_start');
             $table->dateTime('datetime_end');
             $table->integer('time');
+            $table->unsignedBigInteger('created_by');
+            $table->foreign('created_by')->references('id')->on('users');
             $table->timestamps();
         });
     }
