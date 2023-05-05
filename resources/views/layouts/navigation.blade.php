@@ -15,9 +15,12 @@
                     <x-nav-link :href="route('index')" :active="request()->routeIs('index')">
                         {{ __('Início') }}
                     </x-nav-link>
+
+                    @can('viewAny', App\Models\User::class)
                     <x-nav-link :href="route('user.index')" :active="request()->routeIs('user.index')">
                         {{ __('Usuários') }}
                     </x-nav-link>
+                    @endcan
 
                     @can('viewAny', App\Models\Question::class)
                     <x-nav-link :href="route('question.index')" :active="request()->routeIs('question.index')">
