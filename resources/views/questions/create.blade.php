@@ -106,15 +106,26 @@
                     <x-input-error :messages="$errors->get('type')" class="mt-2" />
                 </div>
 
+                <fieldset id="true_false">
+                    <div class="form-check">
+                        <input type="radio" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="is_true" value="1">
+                        <label class="ml-2 form-check-label">Verdadeiro</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="is_true" value="0">
+                        <label class="ml-2 form-check-label">Falso</label>
+                    </div>
+                </fieldset>
+
                 <fieldset id="options">
                     <div>
                         <!-- Altenativa 1 -->
                         <div>
                             <x-input-label for="option1" :value="__('Alternativa 1')" />
 
-                            <x-text-input id="option1" class="block mt-1 w-full" type="text" name="option[]" :value="old('option.0')" autofocus />
+                            <x-text-input id="option1" class="block mt-1 w-full" type="text" name="options[]" :value="old('options.0')" autofocus />
 
-                            <x-input-error :messages="$errors->get('option.0')" class="mt-2" />
+                            <x-input-error :messages="$errors->get('options.0')" class="mt-2" />
                         </div>
                          <!-- Is Correct -->
                         <div class="block mt-2">
@@ -129,9 +140,9 @@
                         <div class="mt-4">
                             <x-input-label for="option2" :value="__('Alternativa 2')" />
 
-                            <x-text-input id="option2" class="block mt-1 w-full" type="text" name="option[]" :value="old('option.1')" autofocus />
+                            <x-text-input id="option2" class="block mt-1 w-full" type="text" name="options[]" :value="old('options.1')" autofocus />
 
-                            <x-input-error :messages="$errors->get('option.1')" class="mt-2" />
+                            <x-input-error :messages="$errors->get('options.1')" class="mt-2" />
                         </div>
                         <!-- Is Correct -->
                         <div class="block mt-2">
@@ -146,9 +157,9 @@
                         <div class="mt-4">
                             <x-input-label for="option3" :value="__('Alternativa 3')" />
 
-                            <x-text-input id="option3" class="block mt-1 w-full" type="text" name="option[]" :value="old('option.2')" autofocus />
+                            <x-text-input id="option3" class="block mt-1 w-full" type="text" name="options[]" :value="old('options.2')" autofocus />
 
-                            <x-input-error :messages="$errors->get('option.2')" class="mt-2" />
+                            <x-input-error :messages="$errors->get('options.2')" class="mt-2" />
                         </div>
                         <!-- Is Correct -->
                         <div class="block mt-2">
@@ -163,9 +174,9 @@
                         <div class="mt-4">
                             <x-input-label for="option4" :value="__('Alternativa 4')" />
 
-                            <x-text-input id="option4" class="block mt-1 w-full" type="text" name="option[]" :value="old('option.3')" autofocus />
+                            <x-text-input id="option4" class="block mt-1 w-full" type="text" name="options[]" :value="old('options.3')" autofocus />
 
-                            <x-input-error :messages="$errors->get('option.3')" class="mt-2" />
+                            <x-input-error :messages="$errors->get('options.3')" class="mt-2" />
                         </div>
                         <!-- Is Correct -->
                         <div class="block mt-2">
@@ -187,4 +198,56 @@
             </div>
         </div>
     </div>  
+
+    <script>
+        $(document).ready(function () {
+            const checkboxes = $('input[type="checkbox"]');
+            const tipoQuestao = $('#type');
+            const options = $('#options');
+            const true_false = $('#true_false');
+
+            options.hide();
+            true_false.hide();
+
+            /*
+            1 - questao aberta
+            2 - múltipla escolha com uma resposta correta
+            3 - múltipla escolha com mais de uma resposta correta
+            4 - verdadeiro ou falso
+            */
+
+            var limite = 4;
+
+            tipoQuestao.change(function () {
+                checkboxes.prop("checked", false);
+                checkboxes.prop('disabled', false);
+
+                if (tipoQuestao.val() == '4') {
+                    true_false.show();
+                    options.hide();
+                } else if (tipoQuestao.val() == '1') {
+                    true_false.hide();
+                    options.hide();
+                } else {
+                    true_false.hide();
+                    options.show();
+                }
+
+                if (tipoQuestao.val() == '2') {
+                    limite = 1;
+                } else {
+                    limite = 4;
+                }
+
+                checkboxes.change(function () {
+                        const selecionados = checkboxes.filter(':checked'); // selecione os checkboxes que foram selecionados
+                        if (selecionados.length >= limite) {
+                            checkboxes.not(':checked').prop('disabled', true); // desabilite os checkboxes não selecionados
+                        } else {
+                            checkboxes.prop('disabled', false); // habilite todos os checkboxes
+                        }
+                });
+            });
+        });
+    </script>
 </x-app-layout>

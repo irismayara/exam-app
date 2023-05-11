@@ -10,18 +10,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class QuestionController extends Controller
-{
-
-    public function __construct()
-    {
-        $this->authorizeResource(Question::class, 'question');
-    }
-    
+{    
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('viewAny', Question::class);
+        
         $questions = Question::all();
 
         return view('questions.index', compact('questions'));
@@ -32,6 +28,8 @@ class QuestionController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Question::class);
+
         return view('questions.create');
     }
 
@@ -40,7 +38,8 @@ class QuestionController extends Controller
      */
     public function store(QuestionRequest $request)
     {
-        //dd($request->all());
+        $this->authorize('create', Question::class);
+
         $question = Question::create([
             'title' => $request->title,
             'question' => $request->question,
@@ -49,17 +48,19 @@ class QuestionController extends Controller
             'tags' => $request->tags,
             'difficulty' => $request->difficulty,
             'type' => $request->type,
+            'is_true' => $request->is_true,
             'created_by' => Auth::user()->id,
         ]);
 
-        if($question->type != 1) // se não for questão aberta
+        if($question->isMultiplaEscolha() || 
+        $question->isMultiplasRespostas()) // se tem opções
         {
-            foreach ($request->option as $key => $option) 
+            foreach ($request->options as $key => $option) 
             {
                 Option::create([
                     'option' => $option,
                     'question_id' => $question->id,
-                    'is_correct' => isset($request->is_correct[$key])
+                    'is_correct' => in_array($key, $request->is_correct ?? []),
                 ]);
             }
         }
@@ -72,8 +73,11 @@ class QuestionController extends Controller
      */
     public function show(int $question)
     {
-        $question = Question::find($question);
-        $user = User::find($question->created_by);
+        $question = Question::findOrFail($question);
+
+        $this->authorize('view', $question);
+        
+        $user = User::findOrFail($question->created_by);
 
         return view('questions.show', compact('question', 'user'));
     }
@@ -83,7 +87,9 @@ class QuestionController extends Controller
      */
     public function edit(int $question)
     {
-        $question = Question::find($question);
+        $question = Question::findOrFail($question);
+
+        $this->authorize('update', $question);
 
         return view('questions.edit', compact('question'));
     }
@@ -93,7 +99,9 @@ class QuestionController extends Controller
      */
     public function update(QuestionRequest $request, int $question)
     {
-        $question = Question::find($question);
+        $question = Question::findOrFail($question);
+
+        $this->authorize('update', $question);
         
         foreach ($question->options as $option) {
             $option->delete();
@@ -105,18 +113,20 @@ class QuestionController extends Controller
             'course' => $request->course,
             'topic' => $request->topic,
             'tags' => $request->tags,
-            'level' => $request->level,
+            'difficulty' => $request->difficulty,
             'type' => $request->type,
+            'is_true' => $request->is_true,
         ]);
-
-        if($question->type != 1) // se não for questão aberta
+    
+        if($question->isMultiplaEscolha() || 
+        $question->isMultiplasRespostas()) // se tem opções
         {
-            foreach ($request->option as $key => $option) 
+            foreach ($request->options as $key => $option) 
             {
                 Option::create([
                     'option' => $option,
                     'question_id' => $question->id,
-                    'is_correct' => isset($request->is_correct[$key])
+                    'is_correct' => in_array($key, $request->is_correct ?? []),
                 ]);
             }
         }
@@ -129,7 +139,9 @@ class QuestionController extends Controller
      */
     public function destroy(int $question)
     {
-        $question = Question::find($question);
+        $question = Question::findOrFail($question);
+
+        $this->authorize('delete', $question);
 
         foreach ($question->options as $option) {
             $option->delete();

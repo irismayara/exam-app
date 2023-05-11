@@ -16,8 +16,29 @@ class Question extends Model
         'tags',
         'difficulty',
         'type',
+        'is_true',
         'created_by',
     ];
+
+    public function isAberta()
+    {
+        return $this->type == 1;
+    }
+
+    public function isMultiplaEscolha()
+    {
+        return $this->type == 2;
+    }
+
+    public function isMultiplasRespostas()
+    {
+        return $this->type == 3;
+    }
+
+    public function isVerdadeiroOuFalso()
+    {
+        return $this->type == 4;
+    }
 
     public function users()
     {

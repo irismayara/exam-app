@@ -13,7 +13,7 @@ class QuestionPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->type === 'admin' || $user->type === 'docente';
+        return $user->isAdmin() || $user->isDocente();
     }
 
     /**
@@ -21,7 +21,7 @@ class QuestionPolicy
      */
     public function view(User $user, Question $question): bool
     {
-        return $user->type === 'admin' || $user->type === 'docente';
+        return $user->isAdmin() || $user->isDocente();
     }
 
     /**
@@ -29,7 +29,7 @@ class QuestionPolicy
      */
     public function create(User $user): bool
     {
-        return $user->type === 'admin' || $user->type === 'docente';
+        return $user->isAdmin() || $user->isDocente();
     }
 
     /**
@@ -37,7 +37,7 @@ class QuestionPolicy
      */
     public function update(User $user, Question $question): bool
     {
-        return ($user->type === 'admin' || $user->type === 'docente') && ($user->id === $question->user_id);
+        return $user->id === $question->created_by;
     }
 
     /**
@@ -45,22 +45,6 @@ class QuestionPolicy
      */
     public function delete(User $user, Question $question): bool
     {
-        return ($user->type === 'admin' || $user->type === 'docente') && ($user->id === $question->user_id);
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Question $question): bool
-    {
-        return ($user->type === 'admin' || $user->type === 'docente') && ($user->id === $question->user_id);
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Question $question): bool
-    {
-        return ($user->type === 'admin' || $user->type === 'docente') && ($user->id === $question->user_id);
+        return $user->id === $question->created_by;
     }
 }

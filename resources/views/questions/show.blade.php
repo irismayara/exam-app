@@ -42,18 +42,25 @@
                     </ul>
 
                     <div class="w-full mt-4 flex items-center justify-between">
-                        <small class="text-gray-400 flex">Criado por: {{ $user->name }}</small>
-                        <small class="text-gray-400 flex">Atualizado em: {{ \Carbon\Carbon::parse($question->updated_at)->format('d/m/Y')}}</small>
+                        <small class="text-gray-400 flex">Criada por: {{ $user->name }}</small>
+                        <small class="text-gray-400 flex">Atualizada em: {{ \Carbon\Carbon::parse($question->updated_at)->format('d/m/Y' )}}</small>
                     </div>
 
-                      <div class="mt-4 flex items-center justify-between">
+                    @canany(['update', 'delete'], $question)
+                      <div class="mt-6 flex items-center justify-between">
+                      @can('update', $question)
                         <a href="{{ route('question.edit', ['id' => $question->id]) }}" class="text-indigo-500 hover:text-indigo-700">Editar</a>
+                      @endcan
+
+                      @can('delete', $question)
                         <form action="{{ route('question.destroy', ['id' => $question->id]) }}" method="POST">
                           @csrf
                           @method('DELETE')
                           <button type="submit" class="text-red-500 hover:text-red-700">Excluir</button>
                         </form>
+                      @endcan
                       </div>
+                    @endcanany
                     </div>
                 </div>
               </div>

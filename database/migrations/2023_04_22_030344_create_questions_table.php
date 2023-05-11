@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('tags');
             $table->integer('difficulty');
             $table->integer('type'); 
+            $table->integer('is_true')->nullable(true); 
             $table->unsignedBigInteger('created_by');
             $table->foreign('created_by')->references('id')->on('users');
             $table->timestamps();

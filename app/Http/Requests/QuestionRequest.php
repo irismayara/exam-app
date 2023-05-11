@@ -36,7 +36,9 @@ class QuestionRequest extends FormRequest
                 'required', 
                 Rule::in(['1', '2', '3', '4']),
             ],
-            'option.*' => 'required_if:type,2,3,4'
+            'option.*' => 'required_if:type,2,3',
+            'is_correct' => 'array|required_if:type,2,3',
+            'is_true' => 'required_if:type,4',
         ];
     }
 }
