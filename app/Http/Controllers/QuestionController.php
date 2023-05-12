@@ -8,6 +8,7 @@ use App\Models\Option;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class QuestionController extends Controller
 {    
@@ -17,9 +18,15 @@ class QuestionController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Question::class);
-        
-        $questions = Question::all();
 
+        $questions = Cache::get('questions');
+        
+        if(!$questions)
+        {
+            $questions = Question::all();
+            Cache::put('questions', $questions);
+        }
+        
         return view('questions.index', compact('questions'));
     }
 
@@ -64,6 +71,8 @@ class QuestionController extends Controller
                 ]);
             }
         }
+
+        Cache::forget('questions');
 
         return redirect('/questions')->with('success', 'Question created successfully!');
     }
@@ -131,6 +140,8 @@ class QuestionController extends Controller
             }
         }
 
+        Cache::forget('questions');
+
         return redirect('/questions')->with('success', 'Question updated successfully!');
     }
 
@@ -148,6 +159,8 @@ class QuestionController extends Controller
         }
 
         $question->delete();
+        
+        Cache::forget('questions');
 
         return redirect('/questions')->with('success', 'Question deleted successfully!');
     }
