@@ -3,7 +3,7 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Novo Usuário') }}
         </h2>
-        <<form class="ml-auto flex w-1/4">
+        <form class="ml-auto flex w-1/4">
             <x-input-search id="search"
                             name="search"
                             aria-label="Search"

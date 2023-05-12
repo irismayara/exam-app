@@ -10,16 +10,13 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function __construct()
-    {
-        $this->authorizeResource(User::class, 'user');
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('viewAny', User::class);
+
         $users = User::all();
 
         return view('users.index', compact('users'));
@@ -30,6 +27,8 @@ class UserController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', User::class);
+
         return view('users.create');
     }
 
@@ -38,6 +37,8 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
+        $this->authorize('create', User::class);
+
         User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -55,9 +56,11 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(int $id)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
+
+        $this->authorize('view', $user);
 
         return view('users.show', compact('user'));
     }
@@ -65,9 +68,11 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(int $id)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
+
+        $this->authorize('update', $user);
 
         return view('users.edit', compact('user'));
     }
@@ -77,7 +82,10 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, string $id)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
+
+        $this->authorize('update', $user);
+
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
@@ -91,9 +99,12 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
+
+        $this->authorize('delete', $user);
+
         $user->delete();
 
         return redirect('/users')->with('success', 'User deleted successfully!');

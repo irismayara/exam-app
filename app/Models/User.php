@@ -44,6 +44,21 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function isAdmin()
+    {
+        return $this->type === 'admin';
+    }
+
+    public function isDocente()
+    {
+        return $this->type === 'docente';
+    }
+
+    public function isDiscente()
+    {
+        return $this->type === 'discente';
+    }
+
     public function questions()
     {
         return $this->hasMany(Question::class, 'created_by', 'id');
