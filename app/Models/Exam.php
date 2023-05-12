@@ -14,6 +14,7 @@ class Exam extends Model
         'datetime_start',
         'datetime_end',
         'time',
+        'created_by',
     ];
 
     public function questions() 

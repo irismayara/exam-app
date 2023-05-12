@@ -13,7 +13,7 @@ class ExamPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->type === 'docente' || $user->type === 'discente';
+        return $user->isDocente() || $user->isDiscente();
     }
 
     /**
@@ -21,7 +21,7 @@ class ExamPolicy
      */
     public function view(User $user, Exam $exam): bool
     {
-        return $user->type === 'docente' || $user->type === 'discente';
+        return $user->isDocente() || $user->isDiscente();
     }
 
     /**
@@ -29,7 +29,7 @@ class ExamPolicy
      */
     public function create(User $user): bool
     {
-        return $user->type === 'docente';
+        return $user->isDocente();
     }
 
     /**
@@ -37,7 +37,7 @@ class ExamPolicy
      */
     public function update(User $user, Exam $exam): bool
     {
-        return $user->type === 'docente' && $user->id === $exam->created_by;
+        return $user->isDocente() && $user->id === $exam->created_by;
     }
 
     /**
@@ -45,22 +45,19 @@ class ExamPolicy
      */
     public function delete(User $user, Exam $exam): bool
     {
-        return $user->type === 'docente' && $user->id === $exam->created_by;
+        return $user->isDocente() && $user->id === $exam->created_by;
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * Determine whether the user can start the exam.
      */
-    public function restore(User $user, Exam $exam): bool
+    public function start(User $user, Exam $exam): bool
     {
-        return $user->type === 'docente' && $user->id === $exam->created_by;
+        return $user->isDiscente();
     }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Exam $exam): bool
+    public function send(User $user, Exam $exam): bool
     {
-        return $user->type === 'docente' && $user->id === $exam->created_by;
+        return $user->isDiscente();
     }
 }

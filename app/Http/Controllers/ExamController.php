@@ -5,20 +5,19 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ExamRequest;
 use App\Models\Exam;
 use App\Models\Question;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ExamController extends Controller
 {
-    public function __construct()
-    {
-        $this->authorizeResource(Exam::class, 'exam');
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('viewAny', Exam::class);
+
         $exams = Exam::all();
 
         return view('exams.index', compact('exams'));
@@ -29,6 +28,8 @@ class ExamController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Exam::class);
+
         $questions = Question::all();
         
         return view('exams.create', compact('questions'));
@@ -39,11 +40,14 @@ class ExamController extends Controller
      */
     public function store(ExamRequest $request)
     {   
+        $this->authorize('create', Exam::class);
+
         $exam = Exam::create([
             'title'  => $request->title,
             'datetime_start' => $request->datetime_start,
             'datetime_end' => $request->datetime_end,
             'time' => $request->time,
+            'created_by' => Auth::user()->id,
         ]);
 
         $exam->questions()->attach($request->input('questions'));
@@ -56,9 +60,13 @@ class ExamController extends Controller
      */
     public function show(int $exam)
     {
-        $exam = Exam::find($exam);
+        $exam = Exam::findOrFail($exam);
 
-        return view('exams.show', compact('exam'));
+        $this->authorize('view', $exam);
+
+        $user = User::findOrFail($exam->created_by);
+
+        return view('exams.show', compact('exam', 'user'));
     }
 
     /**
@@ -66,7 +74,10 @@ class ExamController extends Controller
      */
     public function edit(int $exam)
     {
-        $exam = Exam::find($exam);
+        $exam = Exam::findOrFail($exam);
+
+        $this->authorize('update', $exam);
+
         $questions = Question::all();
 
         return view('exams.edit', compact('exam', 'questions'));
@@ -77,7 +88,10 @@ class ExamController extends Controller
      */
     public function update(ExamRequest $request, int $exam)
     {
-        $exam = Exam::find($exam);
+        $exam = Exam::findOrFail($exam);
+
+        $this->authorize('update', $exam);
+
         $exam->update([
             'title'  => $request->title,
             'datetime_start' => $request->datetime_start,
@@ -95,11 +109,26 @@ class ExamController extends Controller
      */
     public function destroy(int $exam)
     {
-        $exam = Exam::find($exam);
+        $exam = Exam::findOrFail($exam);
+
+        $this->authorize('delete', $exam);
 
         $exam->questions()->detach(); // O método detach() remove todas as perguntas relacionadas com o exame antes de excluir o próprio exame.
         $exam->delete();
 
         return redirect('/exams')->with('success', 'Exam deleted successfully!');
+    }
+
+    public function start(int $id)
+    {
+        $exam = Exam::findOrFail($id);
+
+        $this->authorize('start', $exam);
+
+        return view('exams.start', compact('exam'));
+    }
+    public function send(Request $request)
+    {
+        //
     }
 }

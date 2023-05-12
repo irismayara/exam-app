@@ -20,30 +20,38 @@
                     <div class="p-8 w-full">
 
                       <a href="#" class="block mt-1 text-lg leading-tight font-medium text-black hover:underline">{{ $exam->title }}</a>
-                      <p class="mt-2 mb-4 text-gray-500">Duração: {{ $exam->time }} minutos</p>
+                      <p class="mt-2 text-gray-500">Inicia em: {{ \Carbon\Carbon::parse($exam->datetime_start)->format('d/m/Y H:i') }}</p>
+                      <p class="mt-1 mb-4 text-gray-500">Finaliza em: {{ \Carbon\Carbon::parse($exam->datetime_end)->format('d/m/Y H:i') }}</p>
+                      <p class="mt-1 mb-4 text-gray-500">Duração: {{ $exam->time }} minutos</p>
 
-                    @foreach($exam->questions as $question)
-                    <div class="my-6 w-full"> 
-                        <hr>
-                        <p class="mt-4 mb-4 text-gray-500">{{ $question->question }}</p>
-                        <ul class="list-group list-group-flush my-4">
-                            @foreach($question->options as $index => $option)
-                            <li class="w-full border-b-2 border-neutral-100 border-opacity-100 py-2 dark:border-opacity-50">
-                            {{ chr($index + 97) }}) {{ $option->option }}
-                            </li>
-                            @endforeach
-                        </ul>
+
+                      <div class="w-full mt-4 flex items-center justify-between">
+                        <small class="text-gray-400 flex">Criada por: {{ $user->name }}</small>
+                        <small class="text-gray-400 flex">Atualizada em: {{ \Carbon\Carbon::parse($exam->updated_at)->format('d/m/Y')}}</small>
                     </div>
-                    @endforeach
 
+                    @canany(['update', 'delete'], $exam)
                       <div class="mt-6 flex items-center justify-between">
+                      @can('update', $exam)
                         <a href="{{ route('exam.edit', ['id' => $exam->id]) }}" class="text-indigo-500 hover:text-indigo-700">Editar</a>
+                      @endcan
+
+                      @can('delete', $exam)
                         <form action="{{ route('exam.destroy', ['id' => $exam->id]) }}" method="POST">
                           @csrf
                           @method('DELETE')
                           <button type="submit" class="text-red-500 hover:text-red-700">Excluir</button>
                         </form>
+                      @endcan
                       </div>
+                    @endcanany
+
+                    @can('start', $exam)
+                      <x-primary-link class="mt-6" href="{{ route('exam.start', ['id' => $exam->id]) }}">
+                        {{ __('Iniciar') }}
+                      </x-primary-button>
+                    @endcan
+
                     </div>
                 </div>
               </div>
