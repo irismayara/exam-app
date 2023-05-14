@@ -47,6 +47,8 @@ Route::middleware('auth')->group(function () {
      Route::get('/exams/{id}/edit', [ExamController::class, 'edit'])->name('exam.edit');
      Route::put('/exams/{id}', [ExamController::class, 'update'])->name('exam.update');
      Route::delete('/exams/{id}', [ExamController::class, 'destroy'])->name('exam.destroy');
+     Route::get('/exams/start/{id}', [ExamController::class, 'start'])->name('exam.start');
+     Route::post('/exams/start/{id}', [ExamController::class, 'send'])->name('exam.send');
 });
 
 require __DIR__.'/auth.php';
