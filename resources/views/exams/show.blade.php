@@ -19,7 +19,7 @@
                   <div class="md:flex">
                     <div class="p-8 w-full">
 
-                      <a href="#" class="block mt-1 text-lg leading-tight font-medium text-black hover:underline">{{ $exam->title }}</a>
+                      <h3 class="block mt-1 text-lg leading-tight font-medium text-black ">{{ $exam->title }}</h3>
                       <p class="mt-2 text-gray-500">Inicia em: {{ \Carbon\Carbon::parse($exam->datetime_start)->format('d/m/Y H:i') }}</p>
                       <p class="mt-1 mb-4 text-gray-500">Finaliza em: {{ \Carbon\Carbon::parse($exam->datetime_end)->format('d/m/Y H:i') }}</p>
                       <p class="mt-1 mb-4 text-gray-500">Duração: {{ $exam->time }} minutos</p>

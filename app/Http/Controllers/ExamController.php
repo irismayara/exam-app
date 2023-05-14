@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ExamRequest;
+use App\Models\Answer;
 use App\Models\Exam;
 use App\Models\Question;
 use App\Models\User;
@@ -18,7 +19,8 @@ class ExamController extends Controller
     {
         $this->authorize('viewAny', Exam::class);
 
-        $exams = Exam::all();
+        $exams = Exam::where('datetime_start', '>', now())->get();
+        //$exams = Exam::all();
 
         return view('exams.index', compact('exams'));
     }
@@ -58,13 +60,13 @@ class ExamController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $exam)
+    public function show(int $id)
     {
-        $exam = Exam::findOrFail($exam);
+        $exam = Exam::findOrFail($id);
 
         $this->authorize('view', $exam);
 
-        $user = User::findOrFail($exam->created_by);
+        $user = User::find($exam->created_by);
 
         return view('exams.show', compact('exam', 'user'));
     }
@@ -127,8 +129,38 @@ class ExamController extends Controller
 
         return view('exams.start', compact('exam'));
     }
-    public function send(Request $request)
+    public function send(int $id, Request $request)
     {
-        //
+        $exam = Exam::findOrFail($id);
+
+        $this->authorize('start', $exam);
+
+        $user_id = Auth::user()->id;
+
+        foreach($request->answer as $key => $a)
+        {
+            $answer = Answer::create([
+                'exam_id'  => $exam->id,
+                'user_id' => $user_id,
+                'question_id' => $key,
+            ]);
+            
+            $question = Question::findOrFail($key);
+                
+            if($question->isAberta())
+            {
+                $answer->answer_text = $a;
+                $answer->save();
+            }
+            elseif($question->isVerdadeiroOuFalso()) 
+            {
+                $answer->is_true = $a;
+                $answer->save();
+            }
+            else 
+            {
+                $answer->options()->attach($a);
+            }
+        }
     }
 }
