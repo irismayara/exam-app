@@ -3,6 +3,7 @@
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ExamController;
+use App\Http\Controllers\ChangePasswordController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,6 +30,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('user.update');
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('user.destroy');
+    
+    //Password
+    Route::get('/change-password', [ChangePasswordController::class, 'create'])->name('change.password');
+    Route::post('/change-password', [ChangePasswordController::class, 'store'])->name('store.password');
 
     //Question
     Route::get('/questions', [QuestionController::class, 'index'])->name('question.index');

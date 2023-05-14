@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
@@ -39,18 +42,24 @@ class UserController extends Controller
     {
         $this->authorize('create', User::class);
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'ie' => $request->ie,
             'type' => $request->type,
             //'password' => Hash::make($request->password)
-            'password' => Hash::make(Str::random(8))
+            'password' => Hash::make($password = Str::random(8))
         ]);
 
         //envio de email
+        //Mail::to($user->email)->send(new \App\Mail\WelcomeEmail($user, $password));
 
-        return redirect('/users')->with('success', 'User created successfully!');
+        //return redirect('/users')->with('success', 'User created successfully!')
+        return view('emails.welcome', [
+            'userName' => $user->name,
+            'userEmail' => $user->email,
+            'userPassword' => $password,
+        ]);
     }
 
     /**

@@ -13,6 +13,7 @@
 
         <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/746/746980.png?w=740&t=st=1682274472~exp=1682275072~hmac=811aa447451594e02f56dda4d111f2c7855324b7162b09be773771fb704731a6" sizes="16x16 32x32" type="image/png">
 
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script
             src="https://code.jquery.com/jquery-3.6.4.js"
             integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
@@ -40,5 +41,13 @@
                 {{ $slot }}
             </main>
         </div>
+        <script>
+                // Verifica se o usuário já mudou a senha
+                if ('{{ Auth::user()->password_changed_at }}' == '') {
+                    // Redireciona o usuário para a página de alteração de senha
+                    window.location.href = '{{ route("change.password") }}';
+                }
+           
+        </script>
     </body>
 </html>
