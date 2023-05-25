@@ -164,4 +164,22 @@ class QuestionController extends Controller
 
         return redirect('/questions')->with('success', 'Question deleted successfully!');
     }
+
+    public function search(Request $request)
+    {
+        $termo = $request->input('search');
+        $tipoQuestao = $request->input('searchType');
+
+        if($tipoQuestao){
+            $questions = Question::where('type', 'like', '%' . $tipoQuestao . '%')
+            ->get();
+        } else {
+            $questions = Question::where('title', 'like', '%' . $termo . '%')
+                ->orWhere('course', 'like', '%' . $termo . '%')
+                ->orWhere('tags', 'like', '%' . $termo . '%')
+                ->get();
+        }
+
+        return view('questions.index', compact('questions'))->render();
+    }
 }

@@ -37,12 +37,14 @@ Route::middleware('auth')->group(function () {
 
     //Question
     Route::get('/questions', [QuestionController::class, 'index'])->name('question.index');
+    Route::get('/questions/search', [QuestionController::class, 'search'])->name('questions.search');
     Route::get('/questions/create', [QuestionController::class, 'create'])->name('question.create');
     Route::get('/questions/{id}', [QuestionController::class, 'show'])->name('question.show');
     Route::post('/questions', [QuestionController::class, 'store'])->name('question.store');
     Route::get('/questions/{id}/edit', [QuestionController::class, 'edit'])->name('question.edit');
     Route::put('/questions/{id}', [QuestionController::class, 'update'])->name('question.update');
     Route::delete('/questions/{id}', [QuestionController::class, 'destroy'])->name('question.destroy');
+    
 
      //Exam
      Route::get('/exams', [ExamController::class, 'index'])->name('exam.index');
