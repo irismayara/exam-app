@@ -4,6 +4,9 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class Handler extends ExceptionHandler
 {
@@ -27,4 +30,23 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    /*public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof NotFoundHttpException) {
+            // Tratar o erro "Not Found"
+
+            return response()->view('errors.notfound', [], 404);
+        } elseif ($exception instanceof AccessDeniedHttpException || $exception instanceof AuthorizationException) {
+            // Tratar o erro "Forbidden"
+
+            return response()->view('errors.authorization', [], 403);
+        } else {
+            // Tratar outros erros gerais
+
+            return response()->view('errors.error', [], 500);
+        }
+
+        //return parent::render($request, $exception);
+    }*/
 }

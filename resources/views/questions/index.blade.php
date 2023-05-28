@@ -7,7 +7,7 @@
         <form class="ml-auto flex" action="{{ route('questions.search') }}" method="GET" id="searchForm">
             @csrf
 
-            <select id="searchType" name="searchType" class = "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-64 mr-6 text-neutral-500">
+            <select id="searchType" name="searchType" class = "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-64 h-9 mr-6 text-neutral-500">
                         <option selected disabled>Filtrar por tipo de questão</option>
                         <option value="1" 
                         {{ old('type') == 1 ? 'selected' : '' }}>Aberta</option>
@@ -22,7 +22,7 @@
             <x-input-search id="search" name="search" aria-label="Search" aria-describedby="button-addon2"/>
         </form>
         
-        <x-primary-link class="ml-3" href="{{ route('question.create') }}">
+        <x-primary-link href="{{ route('question.create') }}">
                 {{ __('Adicionar Nova') }}
         </x-primary-button>
     </x-slot>

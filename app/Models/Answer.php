@@ -14,6 +14,7 @@ class Answer extends Model
         'question_id',
         'answer_text',
         'is_true',
+        'is_correct',
     ];
 
     public function user() 
@@ -24,9 +25,12 @@ class Answer extends Model
     {
         return $this->belongsTo(Exam::class);
     }
-
     public function options()
     {
         return $this->belongsToMany(Option::class, 'answers_options', 'answer_id', 'option_id');
+    }
+    public function question()
+    {
+        return $this->belongsTo(Question::class);
     }
 }

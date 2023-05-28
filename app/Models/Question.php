@@ -54,4 +54,14 @@ class Question extends Model
     {
         return $this->belongsToMany(Exam::class, 'exam_question');
     }
+
+    public function correctOptions()
+    {
+        if($this->isMultiplaEscolha() || $this->isMultiplasRespostas())
+        {
+            return $this->options()->where('is_correct', true)->get();
+        }
+
+        return collect(); // Retorna uma coleção vazia caso não haja opções corretas
+    }
 }

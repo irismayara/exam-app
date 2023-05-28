@@ -23,7 +23,13 @@ class QuestionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|min:3|max:255',
+            'title' => [
+                'required',
+                'string',
+                'min:3',
+                'max:255',
+                Rule::unique('questions', 'title'),
+            ],
             'question' => 'required|string|min:10|max:255',
             'course' => 'required|string|min:3|max:255',
             'topic' => 'required|string|min:3|max:255',

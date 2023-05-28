@@ -66,6 +66,7 @@
                             @endif
                         </div>
                         @endforeach
+                        <input hidden name="attempt_id" value="{{ $attempt->id }}">
                       <x-primary-button class="mt-6" id="send_exam">
                           {{ __('Finalizar') }}
                       </x-primary-button>
@@ -84,7 +85,7 @@
         <p class="mb-4">Você está prestes a finalizar a prova. Deseja continuar?</p>
         <div class="flex justify-end">
           <x-secondary-button id="btn-nao" class="mr-2">
-              {{ __('Cancelar') }}
+              {{ __('Revisar') }}
           </x-secondary-button>
           <x-primary-button id="btn-sim">
               {{ __('Finalizar') }}
@@ -105,10 +106,10 @@
     </div>
 
     <script>
-      $('#pop-up-finalizar-prova').hide();
-      $('#pop-up-tempo-esgotado').hide();
+        $('#pop-up-finalizar-prova').hide();
+        $('#pop-up-tempo-esgotado').hide();
 
-      var tempo_restante = {{ $exam->time }} * 60; // tempo restante em segundos
+        var tempo_restante = {{ $exam->time }} * 60; // tempo restante em segundos
       setInterval(function(){
           tempo_restante--;
           var minutos = Math.floor(tempo_restante / 60);
@@ -120,26 +121,27 @@
               setTimeout(function() {
                 $('#form_exam').submit();
               }, 5000);
-          }
+            }
       }, 1000);
 
-      $('#btn-ok').click(function() {
-        $('#pop-up-tempo-esgotado').hide();
-      });
+        $('#btn-ok').click(function() {
+            $('#pop-up-tempo-esgotado').hide();
+        });
 
-      $('#send_exam').click(function(event) {
-        event.preventDefault(); // cancela a submissão do formulário
-        $('#pop-up-finalizar-prova').show();
-      });
-      
-      $('#btn-nao').click(function() {
-        $('#pop-up-finalizar-prova').hide();
-      });
-      
-      $('#btn-sim').click(function() {
-        // submeter a prova normalmente
-        $('#form_exam').submit();
-      });
-    
-    </script>
+        $('#send_exam').click(function(event) {
+            event.preventDefault(); // cancela a submissão do formulário
+            $('#pop-up-finalizar-prova').show();
+        });
+
+        $('#btn-nao').click(function() {
+            $('#pop-up-finalizar-prova').hide();
+        });
+
+        $('#btn-sim').click(function() {
+            // submeter a prova normalmente
+            $('#form_exam').submit();
+        });
+
+</script>
+
 </x-app-layout>

@@ -63,4 +63,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Question::class, 'created_by', 'id');
     }
+
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
+    }
+
+    public function hasAnsweredExam(Exam $exam)
+    {
+        return $this->answers()->where('exam_id', $exam->id)->exists();
+    }
 }

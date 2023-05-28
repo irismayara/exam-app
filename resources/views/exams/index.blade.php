@@ -35,7 +35,7 @@
                     @foreach($exams as $exam)
                     <li>
                         <a class="py-4 px-4 flex" href="{{ route('exam.show', ['id' => $exam->id]) }}">
-                            <img class="h-10 w-10 rounded-full mr-4" src="https://cdn-icons-png.flaticon.com/512/138/138849.png?w=740&t=st=1682446701~exp=1682447301~hmac=fa8ff874a25fee4cc49a759060f7b2dbcf62a53589f7acd188724e015f4c0a3a" alt="">
+                            <img class="h-10 w-10 rounded-full mr-4" src="https://cdn-icons-png.flaticon.com/512/457/457551.png?w=740&t=st=1684983513~exp=1684984113~hmac=2a06e75a0fde7af514e4c8d037d538fd83f66b955b856220a8372cc7840936c3" alt="">
                             <div>
                             <p class="font-medium">{{ $exam->title }}</p>
                             <p class="text-gray-500">{{ \Carbon\Carbon::parse($exam->datetime_start)->format('d/m/Y H:i') }} - {{ \Carbon\Carbon::parse($exam->datetime_end)->format('d/m/Y H:i') }}</p>

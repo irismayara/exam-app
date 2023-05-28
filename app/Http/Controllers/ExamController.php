@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ExamRequest;
 use App\Models\Answer;
+use App\Models\ClassModel;
 use App\Models\Exam;
+use App\Models\ExamAttempt;
 use App\Models\Question;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,8 +21,8 @@ class ExamController extends Controller
     {
         $this->authorize('viewAny', Exam::class);
 
-        $exams = Exam::where('datetime_start', '>', now())->get();
-        //$exams = Exam::all();
+        //$exams = Exam::where('datetime_start', '>', now())->get();
+        $exams = Exam::all();
 
         return view('exams.index', compact('exams'));
     }
@@ -121,46 +123,131 @@ class ExamController extends Controller
         return redirect('/exams')->with('success', 'Exam deleted successfully!');
     }
 
-    public function start(int $id)
+    public function start(int $examId)
     {
-        $exam = Exam::findOrFail($id);
-
-        $this->authorize('start', $exam);
-
-        return view('exams.start', compact('exam'));
-    }
-    public function send(int $id, Request $request)
-    {
-        $exam = Exam::findOrFail($id);
+        $exam = Exam::findOrFail($examId);
 
         $this->authorize('start', $exam);
 
         $user_id = Auth::user()->id;
 
-        foreach($request->answer as $key => $a)
-        {
-            $answer = Answer::create([
-                'exam_id'  => $exam->id,
+        $attempt = ExamAttempt::where('user_id', $user_id)
+        ->where('exam_id', $exam->id) // Verifica o ID da prova
+        ->first();
+
+        if(!$attempt){
+            $attempt = ExamAttempt::create([
+                'exam_id' => $exam->id,
                 'user_id' => $user_id,
-                'question_id' => $key,
+                'started_at' => now(),
             ]);
-            
-            $question = Question::findOrFail($key);
-                
-            if($question->isAberta())
-            {
-                $answer->answer_text = $a;
+        }
+
+        return view('exams.start', compact('exam', 'attempt'));
+    }
+    public function send(int $examId, Request $request)
+    {
+        $exam = Exam::findOrFail($examId);
+
+        $this->authorize('start', $exam);
+
+        $user_id = Auth::user()->id;
+
+        $attemptId = $request->attempt_id;
+
+        $attempt = ExamAttempt::findOrFail($attemptId);
+
+        if ($attempt->is_submitted) {
+            return redirect()->route('exam.show', ['id' => $exam->id])->with('error', 'You have already submitted the exam.');
+        }
+
+        $attempt->finished_at = now();
+        $attempt->is_submitted = true;
+        $attempt->save();        
+
+        if ($request->has('answer')) {
+            foreach ($request->answer as $key => $a) {
+                $answer = Answer::create([
+                    'exam_id' => $exam->id,
+                    'user_id' => $user_id,
+                    'question_id' => $key,
+                ]);
+        
+                $question = Question::findOrFail($key);
+        
+                if ($question->isAberta()) {
+                    $answer->answer_text = $a;
+                } elseif ($question->isVerdadeiroOuFalso()) {
+                    $answer->is_true = $a;
+                } else {
+                    $answer->options()->attach($a);
+
+                    $correctOptions = $question->correctOptions();
+                    $isCorrect = true;
+
+                    if (is_array($a)) {
+                        foreach ($a as $optionSelected) {
+                            if (!$correctOptions->contains('id', $optionSelected)) {
+                                $isCorrect = false;
+                                break;
+                            }
+                        }
+                    } else {
+                        if (!$correctOptions->contains('id', $a)) {
+                            $isCorrect = false;
+                        }
+                    }
+
+                    $answer->is_correct = $isCorrect;
+
+                }
+
                 $answer->save();
-            }
-            elseif($question->isVerdadeiroOuFalso()) 
-            {
-                $answer->is_true = $a;
-                $answer->save();
-            }
-            else 
-            {
-                $answer->options()->attach($a);
             }
         }
+        return redirect()->route('exam.show', ['id' => $exam->id])->with('success', 'Exam answers registered successfully!');
     }
+
+    public function listAnswersByClass(int $examId, int $classId)
+    {
+        $exam = Exam::findOrFail($examId);
+        $class = ClassModel::findOrFail($classId);
+
+        $this->authorize('listAnswersByClass', $class);
+
+        $users = $exam->usersWhoAnsweredInClass($class);
+
+        return view('exams.answers.index', compact('exam', 'class', 'users'));
+    }
+
+    public function editGrading(int $examId, int $userId)
+    {
+        $exam = Exam::findOrFail($examId);
+        $user = User::findOrFail($userId);
+
+        $this->authorize('editGrading', $exam);
+
+        $answers = $exam->answers()
+               ->where('user_id', $user->id)
+               ->get();
+
+        return view('exams.answers.show', compact('exam', 'answers'));
+    }
+
+    public function updateGrading(Request $request, Exam $exam)
+    {
+        $validatedData = $request->validate([
+            'is_correct.*' => 'required|boolean',
+        ]);
+
+        foreach ($validatedData['is_correct'] as $answerId => $isCorrect) {
+            $answer = Answer::findOrFail($answerId);
+
+            $answer->is_correct = $isCorrect;
+            $answer->save();
+        }
+
+        return redirect()->back()->with('success', 'Correção da prova salva com sucesso!');
+    }
+
 }

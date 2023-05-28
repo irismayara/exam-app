@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\ClassModel;
 use App\Models\Exam;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -13,7 +14,7 @@ class ExamPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->isDocente() || $user->isDiscente();
+        return $user->isDocente();
     }
 
     /**
@@ -21,7 +22,20 @@ class ExamPolicy
      */
     public function view(User $user, Exam $exam): bool
     {
-        return $user->isDocente() || $user->isDiscente();
+        if($user->isDocente() && $user->id === $exam->created_by)
+        {
+            return true;
+        }
+
+        if ($user->isDiscente()) {
+            foreach ($exam->class as $class) {
+                if ($class->participants->contains($user->id)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -53,11 +67,45 @@ class ExamPolicy
      */
     public function start(User $user, Exam $exam): bool
     {
-        return $user->isDiscente();
+        $now = now();
+        $startDateTime = $exam->datetime_start;
+        $endDateTime = $exam->datetime_end;
+
+        if ($user->isDiscente()) {
+            foreach ($exam->class as $class) {
+                if ($class->participants->contains($user->id) && $now >= $startDateTime && $now <= $endDateTime) {
+                    // Verificar se o usuário já respondeu a prova
+                    if (!$user->answers()->where('exam_id', $exam->id)->exists()) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
-    public function send(User $user, Exam $exam): bool
+    public function editGrading(User $user, Exam $exam)
     {
-        return $user->isDiscente();
+        foreach($exam->class as $class)
+        {
+            if($user->id === $class->createdBy->id)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function updateGrading(User $user, Exam $exam)
+    {
+        foreach($exam->class as $class)
+        {
+            if($user->id === $class->createdBy->id)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
