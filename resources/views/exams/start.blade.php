@@ -109,20 +109,34 @@
         $('#pop-up-finalizar-prova').hide();
         $('#pop-up-tempo-esgotado').hide();
 
-        var tempo_restante = {{ $exam->time }} * 60; // tempo restante em segundos
-      setInterval(function(){
-          tempo_restante--;
-          var minutos = Math.floor(tempo_restante / 60);
-          var segundos = tempo_restante % 60;
-          $('#cronometro').text('Tempo restante: ' + minutos + ':' + segundos);
-          if (tempo_restante <= 0) {
-              clearInterval();
+          const dataInicioProva = new Date('{{ date("Y-m-d H:i:s", strtotime($attempt->started_at)) }}');
+          const duracaoProvaMinutos = {{ $exam->time }};
+          const duracaoProvaMilissegundos = duracaoProvaMinutos * 60 * 1000;
+          const cronometroElemento = document.getElementById('cronometro');
+
+          function atualizarCronometro() {
+            const tempoRestante = dataInicioProva.getTime() + duracaoProvaMilissegundos - Date.now();
+
+            if (tempoRestante > 0) {
+              const minutos = Math.floor(tempoRestante / 60000);
+              const segundos = Math.floor((tempoRestante % 60000) / 1000);
+
+              const minutosFormatados = minutos.toString().padStart(2, '0');
+              const segundosFormatados = segundos.toString().padStart(2, '0');
+
+              cronometroElemento.textContent = `Tempo restante: ${minutosFormatados}:${segundosFormatados}`;
+
+              setTimeout(atualizarCronometro, 1000);
+            } else {
+              cronometroElemento.textContent = 'Tempo esgotado!';
               $('#pop-up-tempo-esgotado').show();
+
               setTimeout(function() {
                 $('#form_exam').submit();
               }, 5000);
             }
-      }, 1000);
+          }
+          atualizarCronometro();
 
         $('#btn-ok').click(function() {
             $('#pop-up-tempo-esgotado').hide();
