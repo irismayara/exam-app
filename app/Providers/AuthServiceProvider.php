@@ -11,6 +11,8 @@ use App\Models\Question;
 use App\Policies\QuestionPolicy;
 use App\Models\User;
 use App\Policies\UserPolicy;
+use App\Models\ClassModel;
+use App\Policies\ClassPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -23,6 +25,7 @@ class AuthServiceProvider extends ServiceProvider
         Exam::class => ExamPolicy::class,
         Question::class => QuestionPolicy::class,
         User::class => UserPolicy::class,
+        ClassModel::class => ClassPolicy::class,
     ];
 
     /**

@@ -4,6 +4,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\ChangePasswordController;
+use App\Http\Controllers\ClassController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,6 +57,21 @@ Route::middleware('auth')->group(function () {
      Route::delete('/exams/{id}', [ExamController::class, 'destroy'])->name('exam.destroy');
      Route::get('/exams/start/{id}', [ExamController::class, 'start'])->name('exam.start');
      Route::post('/exams/start/{id}', [ExamController::class, 'send'])->name('exam.send');
+
+     Route::get('/exams/{exam}/answers/{class}', [ExamController::class, 'listAnswersByClass'])->name('exams.answers.byclass');
+     Route::get('/exams/{exam}/answers/{user}/grading', [ExamController::class, 'editGrading'])->name('exams.grading.edit');
+     Route::put('/exams/{exam}/answers', [ExamController::class, 'updateGrading'])->name('exams.grading.update');
+
+
+     //Class
+     Route::get('/classes/', [ClassController::class, 'index'])->name('classes.index');
+     Route::get('/classes/create', [ClassController::class, 'create'])->name('classes.create');
+     Route::post('/classes/join/{id}', [ClassController::class, 'join'])->name('classes.join');  
+     Route::post('/classes', [ClassController::class, 'store'])->name('classes.store');
+     Route::get('/classes/{id}', [ClassController::class, 'show'])->name('classes.show');
+     Route::get('/classes/{class}/assign-exam', [ClassController::class, 'showAssignExamForm'])->name('classes.showAssignExamForm');
+     Route::post('/classes/{class}/assign-exam', [ClassController::class, 'assignExam'])->name('classes.assignExam');
+
 });
 
 require __DIR__.'/auth.php';

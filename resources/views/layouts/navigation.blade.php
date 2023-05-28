@@ -22,6 +22,12 @@
                     </x-nav-link>
                     @endcan
 
+                    @can('viewAny', App\Models\ClassModel::class)
+                    <x-nav-link :href="route('classes.index')" :active="request()->routeIs('classes.index')">
+                        {{ __('Turmas') }}
+                    </x-nav-link>
+                    @endcan
+
                     @can('viewAny', App\Models\Question::class)
                     <x-nav-link :href="route('question.index')" :active="request()->routeIs('question.index')">
                         {{ __('Questões') }}
