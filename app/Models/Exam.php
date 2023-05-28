@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ExamAttempt;
 
 class Exam extends Model
 {
@@ -77,6 +78,11 @@ class Exam extends Model
 
     public function hasUserAnswered(User $user)
     {
-        return $this->answers()->where('user_id', $user->id)->exists();
+        return $this->examAttempts()->where('user_id', $user->id)->where('is_submitted', true)->exists();
+    }
+
+    public function examAttempts()
+    {
+        return $this->hasMany(ExamAttempt::class);
     }
 }

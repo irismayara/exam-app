@@ -75,7 +75,7 @@ class ExamPolicy
             foreach ($exam->class as $class) {
                 if ($class->participants->contains($user->id) && $now >= $startDateTime && $now <= $endDateTime) {
                     // Verificar se o usuário já respondeu a prova
-                    if (!$user->answers()->where('exam_id', $exam->id)->exists()) {
+                    if (!$exam->hasUserAnswered($user)) {
                         return true;
                     }
                 }
