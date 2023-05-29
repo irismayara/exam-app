@@ -18,11 +18,10 @@
     </head>
     <body class="font-sans text-gray-900 antialiased">
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+            <div class="w-full sm:max-w-md mt-6 px-6 py-4 overflow-hidden sm:rounded-lg">
                 <div class=" mx-auto">
-                    <img src="https://cdn-icons-png.flaticon.com/512/1147/1147180.png?w=740&t=st=1685204504~exp=1685205104~hmac=5a41d775539a9a2e53f33b6b638b7ae814bd1d47c375eb4bf227bd5dae2499c3" class="w-48 h-48  mx-auto" alt="error">
-                    <p class="text-secondary text-center mt-4">403
-            THIS ACTION IS UNAUTHORIZED.</p>
+                    <img src="https://cdn-icons-png.flaticon.com/512/1179/1179180.png?w=740&t=st=1685393181~exp=1685393781~hmac=f29539a686672014f8b6833ca3a54498d290e75904c59b99dbeb2958d95bf290" class="w-48 h-48  mx-auto" alt="error">
+                    <p class="text-secondary text-center mt-4">403 | THIS ACTION IS UNAUTHORIZED.</p>
                 </div>
             </div>
         </div>

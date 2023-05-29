@@ -7,6 +7,7 @@ use Throwable;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 
 class Handler extends ExceptionHandler
 {
@@ -31,7 +32,7 @@ class Handler extends ExceptionHandler
         });
     }
 
-    /*public function render($request, Throwable $exception)
+    public function render($request, Throwable $exception)
     {
         if ($exception instanceof NotFoundHttpException) {
             // Tratar o erro "Not Found"
@@ -41,6 +42,8 @@ class Handler extends ExceptionHandler
             // Tratar o erro "Forbidden"
 
             return response()->view('errors.authorization', [], 403);
+        } elseif ($exception instanceof AuthenticationException && $request->is('/')) {
+            return redirect()->route('login');
         } else {
             // Tratar outros erros gerais
 
@@ -48,5 +51,5 @@ class Handler extends ExceptionHandler
         }
 
         //return parent::render($request, $exception);
-    }*/
+    }
 }
