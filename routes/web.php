@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ExamController;
@@ -62,6 +63,8 @@ Route::middleware('auth')->group(function () {
      Route::get('/exams/{exam}/answers/{user}/grading', [ExamController::class, 'editGrading'])->name('exams.grading.edit');
      Route::put('/exams/{exam}/answers', [ExamController::class, 'updateGrading'])->name('exams.grading.update');
 
+     //Log
+     Route::post('/logs/registrar', [LogController::class, 'registrarLog'])->name('logs.registrar');
 
      //Class
      Route::get('/classes/', [ClassController::class, 'index'])->name('classes.index');

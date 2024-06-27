@@ -7,6 +7,7 @@ use App\Models\Answer;
 use App\Models\ClassModel;
 use App\Models\Exam;
 use App\Models\ExamAttempt;
+use App\Models\ExamLog;
 use App\Models\Question;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -141,7 +142,21 @@ class ExamController extends Controller
                 'user_id' => $user_id,
                 'started_at' => now(),
             ]);
+
+            ExamLog::create([
+                'timestamp' => now(),
+                'user' => Auth::user()->name,
+                'exam_id' => $exam->id,
+                'action' => 'iniciou a prova',
+            ]);
         }
+
+        ExamLog::create([
+            'timestamp' => now(),
+            'user' => Auth::user()->name,
+            'exam_id' => $exam->id,
+            'action' => 'abriu a prova',
+        ]);
 
         return view('exams.start', compact('exam', 'attempt'));
     }
@@ -163,7 +178,14 @@ class ExamController extends Controller
 
         $attempt->finished_at = now();
         $attempt->is_submitted = true;
-        $attempt->save();        
+        $attempt->save();  
+        
+        ExamLog::create([
+            'timestamp' => now(),
+            'user' => Auth::user()->name,
+            'exam_id' => $exam->id,
+            'action' => 'submeteu a prova',
+        ]);
 
         if ($request->has('answer')) {
             foreach ($request->answer as $key => $a) {
