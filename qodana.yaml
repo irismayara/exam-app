@@ -1,0 +1,48 @@
+#-------------------------------------------------------------------------------#
+#               Qodana analysis is configured by qodana.yaml file               #
+#             https://www.jetbrains.com/help/qodana/qodana-yaml.html            #
+#-------------------------------------------------------------------------------#
+version: "1.0"
+#Specify inspection profile for code analysis
+profile:
+  name: qodana.starter
+#Enable inspections
+#include:
+#  - name: <SomeEnabledInspectionId>
+#Disable inspections
+#exclude:
+#  - name: <SomeDisabledInspectionId>
+#    paths:
+#      - <path/where/not/run/inspection>
+#Execute shell command before Qodana execution (Applied in CI/CD pipeline)
+#bootstrap: sh ./prepare-qodana.sh
+#Install IDE plugins before Qodana execution (Applied in CI/CD pipeline)
+#plugins:
+#  - id: <plugin.id> #(plugin id can be found at https://plugins.jetbrains.com)
+#Specify Qodana linter for analysis (Applied in CI/CD pipeline)
+linter: jetbrains/qodana-php:latest
+include:
+  - name: PhpRedundantOptionalArgumentInspection
+  - name: PhpSwitchCanBeReplacedWithMatchExpressionInspection
+  - name: PhpFullyQualifiedNameUsageInspection
+  - name: PhpUnhandledExceptionInspection
+  - name: PhpMissingReturnTypeInspection
+  - name: PhpUnusedAliasInspection
+  - name: PhpUnusedParameterInspection
+  - name: PhpArrayIsAlwaysEmptyInspection
+  - name: PhpParameterNameChangedDuringInheritanceInspection
+  - name: PhpSwitchStatementWitSingleBranchInspection
+exclude:
+  - name: All
+    paths:
+      - app/Http/Controllers/Auth/NewPasswordController.php
+      - app/Http/Controllers/Auth/PasswordResetLinkController.php
+      - app/Http/Controllers/Auth/RegisteredUserController.php
+      - app/Http/Controllers/UserController.php
+      - app/Http/Controllers/ExamController.php
+      - app/Http/Controllers/ClassController.php
+      - app/Http/Controllers/QuestionController.php
+      - app/Http/Controllers/ChangePasswordController.php
+      - app/Http/Controllers/LogController.php
+      - app/Http/Controllers/Auth/ConfirmablePasswordController.php
+      - app/Http/Controllers/Auth/AuthenticatedSessionController.php
