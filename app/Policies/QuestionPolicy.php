@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Question;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class QuestionPolicy
 {
@@ -19,7 +18,7 @@ class QuestionPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Question $question): bool
+    public function view(User $user): bool
     {
         return $user->isAdmin() || $user->isDocente();
     }

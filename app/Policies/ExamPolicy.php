@@ -2,10 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\ClassModel;
 use App\Models\Exam;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class ExamPolicy
 {

@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\ClassModel;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class ClassPolicy
 {
@@ -19,7 +18,7 @@ class ClassPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, ClassModel $classModel): bool
+    public function view(User $user): bool
     {
         return $user->isDocente() || $user->isDiscente();
     }

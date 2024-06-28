@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\ExamAttempt;
 
 class Exam extends Model
 {
@@ -23,7 +22,7 @@ class Exam extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function questions() 
+    public function questions()
     {
         return $this->belongsToMany(Question::class, 'exam_question');
     }
@@ -40,7 +39,7 @@ class Exam extends Model
 
     public function allWhoAnswered()
     {
-        return User::whereHas('answers', function ($query) 
+        return User::whereHas('answers', function ($query)
         {
             $query->where('exam_id', $this->id);
         })->get();
@@ -53,7 +52,7 @@ class Exam extends Model
             $query->where('exam_id', $this->id);
         })->get();
     }
-    
+
     public function getResult(User $user)
     {
         $totalQuestions = $this->questions->count();
